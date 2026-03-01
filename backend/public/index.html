@@ -81,12 +81,8 @@
 
         const res = await fetch(`/id/${id}`);
 
-        if (res.redirected) {
-          document.getElementById("idResult").innerHTML = `Redirecionaria para: ${res.url}`;
-        } else {
-          const data = await res.json();
-          document.getElementById("idResult").innerText = JSON.stringify(data, null, 2);
-        }
+        const data = await res.json();
+        document.getElementById("idResult").innerText = JSON.stringify(data, null, 2);
       }
 
       async function searchByDate() {

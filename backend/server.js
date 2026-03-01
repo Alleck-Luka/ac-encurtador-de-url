@@ -39,7 +39,7 @@ app.get("/id/:id", async (req, res) => {
 
   if (!url) return res.status(404).json({ error: "Not found" });
 
-  res.redirect(url.original);
+  res.json({ original: url.original });
 });
 
 app.get("/date/:date", async (req, res) => {
