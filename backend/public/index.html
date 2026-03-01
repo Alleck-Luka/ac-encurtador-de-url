@@ -1,0 +1,102 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>URL Shortener</title>
+    <style>
+      body {
+        font-family: Arial;
+        max-width: 600px;
+        margin: 40px auto;
+      }
+      input,
+      button {
+        padding: 8px;
+        margin: 5px 0;
+        width: 100%;
+      }
+      section {
+        border: 1px solid #ddd;
+        padding: 15px;
+        margin-bottom: 20px;
+      }
+      h2 {
+        margin-top: 0;
+      }
+      .result {
+        background: #f4f4f4;
+        padding: 10px;
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>URL Shortener Test Panel</h1>
+
+    <section>
+      <h2>Criar URL</h2>
+      <input id="original" placeholder="Digite a URL (ex: google.com)" />
+      <button onclick="createUrl()">Encurtar</button>
+      <div id="createResult" class="result"></div>
+    </section>
+
+    <section>
+      <h2>Buscar por ID</h2>
+      <input id="searchId" placeholder="Digite o ID" />
+      <button onclick="searchById()">Buscar</button>
+      <div id="idResult" class="result"></div>
+    </section>
+
+    <section>
+      <h2>Buscar por Data</h2>
+      <input id="searchDate" type="date" />
+      <button onclick="searchByDate()">Buscar</button>
+      <div id="dateResult" class="result"></div>
+    </section>
+
+    <script>
+      async function createUrl() {
+        const original = document.getElementById("original").value;
+
+        const res = await fetch("/shorten", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ original }),
+        });
+
+        const data = await res.json();
+
+        document.getElementById("createResult").innerHTML = `
+    <strong>ShortCode:</strong> 
+    <a href="/${data.shortCode}" target="_blank">
+      ${window.location.origin}/${data.shortCode}
+    </a>
+    <br/>
+    <strong>ID:</strong> ${data.id}
+  `;
+      }
+
+      async function searchById() {
+        const id = document.getElementById("searchId").value;
+
+        const res = await fetch(`/id/${id}`);
+
+        if (res.redirected) {
+          document.getElementById("idResult").innerHTML = `Redirecionaria para: ${res.url}`;
+        } else {
+          const data = await res.json();
+          document.getElementById("idResult").innerText = JSON.stringify(data, null, 2);
+        }
+      }
+
+      async function searchByDate() {
+        const date = document.getElementById("searchDate").value;
+
+        const res = await fetch(`/date/${date}`);
+        const data = await res.json();
+
+        document.getElementById("dateResult").innerText = JSON.stringify(data, null, 2);
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,25 @@
+services:
+  db:
+    image: postgres:15
+    container_name: urlshortener_db
+    restart: always
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: urlshortener
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  app:
+    build: ./backend
+    container_name: urlshortener_app
+    restart: always
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgresql://user:password@db:5432/urlshortener
+    ports:
+      - "3000:3000"
+
+volumes:
+  postgres_data:
