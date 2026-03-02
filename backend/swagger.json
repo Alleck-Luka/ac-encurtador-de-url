@@ -1,0 +1,16 @@
+{
+  "definition": {
+    "openapi": "3.0.0",
+    "info": {
+      "title": "URL Shortener API",
+      "version": "1.0.0",
+      "description": "API para encurtamento de URLs"
+    },
+    "servers": [
+      {
+        "url": "/"
+      }
+    ]
+  },
+  "apis": ["./server.js"]
+}
